@@ -4,11 +4,13 @@ import HomePage from './pages/HomePage'
 import ArticlesListPage from './pages/ArticlesListPage';
 import ArticlePage from './pages/ArticlePage';
 import AboutPage from './pages/AboutPage';
+import NotFoundPage from './pages/NotFoundPage';
 import Layout from './Layout';
 
 const routes = [{
   path: '/',
   element: <Layout />,
+  errorElement: <NotFoundPage />,
   children: [
     { path: '/',element: <HomePage /> },
     { path: '/articles',element: <ArticlesListPage /> },
