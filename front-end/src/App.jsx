@@ -12,7 +12,7 @@ const routes = [{
   children: [
     { path: '/',element: <HomePage /> },
     { path: '/articles',element: <ArticlesListPage /> },
-    { path: '/article',element: <ArticlePage /> },
+    { path: '/articles/:name',element: <ArticlePage /> },
     { path: '/about',element: <AboutPage /> }
   ]
 }]

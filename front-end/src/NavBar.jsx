@@ -11,9 +11,6 @@ export default function NavBar() {
                     <Link to="/articles">Articles</Link>
                 </li>
                 <li>
-                    <Link to="/article">Article</Link>
-                </li>
-                <li>
                     <Link to="/about">About</Link>
                 </li>
             </ul>
