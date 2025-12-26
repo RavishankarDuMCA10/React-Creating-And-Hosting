@@ -31,6 +31,21 @@ app.get('/api/articles/:name', async (req, res) => {
     res.json(article);
 });
 
+// Add middle function to varify authtoken of post request.
+app.use(async function (req, res, next) {
+    const {authtoken } = req.headers;
+    if (authtoken) {
+        try {
+            const user = await admin.auth().verifyIdToken(authtoken);
+            req.user = user;
+        } catch (error) {
+            res.sendStatus(400);
+            console.error("Error verifying token:", error);
+        }
+    }
+    next();
+});
+
 app.post('/api/articles/:name/upvote', async (req, res) => {
     const { name } = req.params;
     const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
