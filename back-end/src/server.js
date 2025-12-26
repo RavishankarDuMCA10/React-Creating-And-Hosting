@@ -38,12 +38,12 @@ app.use(async function (req, res, next) {
         try {
             const user = await admin.auth().verifyIdToken(authtoken);
             req.user = user;
+            next();
         } catch (error) {
             res.sendStatus(400);
             console.error("Error verifying token:", error);
         }
-    }
-    next();
+    }    
 });
 
 app.post('/api/articles/:name/upvote', async (req, res) => {
@@ -51,7 +51,7 @@ app.post('/api/articles/:name/upvote', async (req, res) => {
     const { uid } = req.user;
     const article = await db.collection('articles').findOne({ name });
     const upvoteIds = article.upvoteIds || [];
-    const canUpvote = uid && !upvoteIds.include(uid);
+    const canUpvote = uid && !upvoteIds.includes(uid);
 
     if (canUpvote) {
         const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
