@@ -33,7 +33,7 @@ app.get('/api/articles/:name', async (req, res) => {
 
 // Add middle function to varify authtoken of post request.
 app.use(async function (req, res, next) {
-    const {authtoken } = req.headers;
+    const { authtoken } = req.headers;
     if (authtoken) {
         try {
             const user = await admin.auth().verifyIdToken(authtoken);
@@ -48,12 +48,23 @@ app.use(async function (req, res, next) {
 
 app.post('/api/articles/:name/upvote', async (req, res) => {
     const { name } = req.params;
-    const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
-        $inc: { upvotes: 1 } }, {
-            returnDocument: "after",
-     });
+    const { uid } = req.user;
+    const article = await db.collection('articles').findOne({ name });
+    const upvoteIds = article.upvoteIds || [];
+    const canUpvote = uid && !upvoteIds.include(uid);
 
-     res.json(updatedArticle);
+    if (canUpvote) {
+        const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
+            $inc: { upvotes: 1 },
+            $push: { upvoteIds: uid },
+        }, {
+                returnDocument: "after",
+        });
+
+        res.json(updatedArticle);
+    } else {
+        res.sendStatus(403);
+    }
 });
 
 app.post('/api/articles/:name/comments', async (req, res) => {
