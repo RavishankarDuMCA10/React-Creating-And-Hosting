@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 credentials.json
+.env
+prod-env.yaml
 
 # Editor directories and files
 .vscode/*

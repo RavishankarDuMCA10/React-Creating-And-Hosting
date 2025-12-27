@@ -21,7 +21,9 @@ let db;
 app.use(express.json());
 
 async function connectToDb() {
-const uri = 'mongodb://127.0.0.1:27017';
+    const uri = !process.env.MONGODB_USERNAME
+        ? 'mongodb://127.0.0.1:27017'
+        : `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.icpbrc1.mongodb.net/?appName=Cluster0`;
 
     const client = new MongoClient(uri, { serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true, }});
 
